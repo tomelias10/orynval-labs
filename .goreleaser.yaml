@@ -94,7 +94,7 @@ changelog:
       - "Merge pull request"
 
 release:
-  draft: true
+  draft: false
   prerelease: auto
 
 snapshot:
