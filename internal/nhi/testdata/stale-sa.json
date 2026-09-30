@@ -1,0 +1,11 @@
+{
+  "type": "service_account",
+  "project_id": "synthetic-demo-proj",
+  "client_email": "legacy-batch@synthetic-demo-proj.iam.gserviceaccount.com",
+  "disabled": true,
+  "last_used": "2021-02-01",
+  "valid_before": "2021-08-01",
+  "labels": {
+    "owner": "platform-team"
+  }
+}
