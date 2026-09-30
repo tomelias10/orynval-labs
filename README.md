@@ -48,7 +48,15 @@ than guessed. It produces a gap report and an exportable draft questionnaire.
 **No hallucinated compliance claims, no auto-certification, and nothing is
 uploaded anywhere** — grounding and citation are enforced, not aspirational.
 
-## Found something concerning?\n\nIf one of the tools surfaces a finding you want a second set of eyes on, **Orynval can review the report with you.** Before sharing, remove any customer data or secrets that are not already redacted.\n\n**Next step:** visit https://orynval.com and send the finding/report through the contact form. Include which tool you ran (`nhi-ghost`, `mcp-drift`, or `trust-proof`) and the smallest reproducible context you can safely share.\n\nThis is also where to report a false positive, missed detection, or deployment question.\n\n## Shared guarantees
+## Found something concerning?
+
+If one of the tools surfaces a finding you want a second set of eyes on, **Orynval can review the report with you.** Before sharing, remove any customer data or secrets that are not already redacted.
+
+**Next step:** visit https://orynval.com and send the finding/report through the contact form. Include which tool you ran (`nhi-ghost`, `mcp-drift`, or `trust-proof`) and the smallest reproducible context you can safely share.
+
+This is also where to report a false positive, missed detection, or deployment question.
+
+## Shared guarantees
 
 Every tool is built on one shared core (`internal/`) and inherits the same
 posture:
