@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cursor-linter": {
+      "command": "npx",
+      "args": ["-y", "@acme/linter-mcp@3.2.1"]
+    }
+  }
+}

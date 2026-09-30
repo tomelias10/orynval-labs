@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem@1.0.0", "/"]
+    },
+    "github": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "GITHUB_TOKEN", "ghcr.io/github/github-mcp-server"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_synthetic0123456789abcdefghijklmnopqrst"
+      }
+    },
+    "installer": {
+      "command": "npx",
+      "args": ["-y", "quickstart-mcp"]
+    },
+    "remote": {
+      "url": "https://mcp.partner.example/sse"
+    }
+  }
+}
