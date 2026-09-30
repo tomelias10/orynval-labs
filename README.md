@@ -52,7 +52,7 @@ uploaded anywhere** — grounding and citation are enforced, not aspirational.
 
 If one of the tools surfaces a finding you want a second set of eyes on, **Orynval can review the report with you.** Before sharing, remove any customer data or secrets that are not already redacted.
 
-**Next step:** visit https://orynval.com and send the finding/report through the contact form. Include which tool you ran (`nhi-ghost`, `mcp-drift`, or `trust-proof`) and the smallest reproducible context you can safely share.
+**Next step:** visit https://orynval.com and send the finding/report through the contact form, or email **tom@orynval.com** directly. Include which tool you ran (`nhi-ghost`, `mcp-drift`, or `trust-proof`) and the smallest reproducible context you can safely share.
 
 This is also where to report a false positive, missed detection, or deployment question.
 
