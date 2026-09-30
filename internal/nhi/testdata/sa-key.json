@@ -1,0 +1,9 @@
+{
+  "type": "service_account",
+  "project_id": "synthetic-demo-proj",
+  "private_key_id": "0000000000000000000000000000000000000000",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nSYNTHETIC-DOCUMENTATION-KEY-BODY-NOT-A-REAL-KEY\n-----END PRIVATE KEY-----\n",
+  "client_email": "ci-deployer@synthetic-demo-proj.iam.gserviceaccount.com",
+  "client_id": "111111111111111111111",
+  "token_uri": "https://oauth2.example.invalid/token"
+}

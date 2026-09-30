@@ -1,0 +1,19 @@
+# SYNTHETIC demo workflow — do not use as a real pipeline.
+name: deploy
+
+on:
+  pull_request_target:
+    branches: [main]
+
+permissions: write-all
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push release
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: ./scripts/deploy.sh

@@ -1,0 +1,8 @@
+Release notes for the synthetic demo service.
+
+This file intentionally contains no machine identities, no credentials, and no
+permission grants. It exists to assert that nhi-ghost reports nothing here — a
+guard against false positives on ordinary prose and documentation.
+
+The billing worker reads its configuration at startup and logs a summary. See
+the operations runbook for the on-call rotation and escalation policy.

@@ -150,6 +150,50 @@ sets the bar to draft an answer and `--fail-on-gaps` exits `3` when any question
 is `UNKNOWN`. (XLSX ingest/export, described in
 [`docs/specs/trust-proof.md`](docs/specs/trust-proof.md), is specified but not
 part of this slice.)
+### Demo: `nhi-ghost` (offline, deterministic, well under 5 seconds)
+
+```sh
+make demo-nhi      # or: go run ./cmd/nhi-ghost internal/nhi/testdata
+```
+
+Scans the synthetic fixture tree and prints one ranked, identity-centric finding
+per machine identity — with observed blast radius, the OBSERVED/INFERRED basis
+for each risk factor, and concrete remediation. Secret values are never printed:
+
+```
+nhi-ghost 0.1.0
+7 findings: 4 high, 1 medium, 1 low, 1 info
+
+[HIGH] orynval.nhi.identity-risk — Committed secret material
+  where:      app.env:3
+  what:       Discovered api-key STRIPE_API_KEY at app.env:3. Risk factors: secret-exposed.
+  why:        A live credential committed to the tree can be used by anyone who can read the repository.
+  fix:        Revoke and rotate the credential, remove it from the working tree and git history, and load it from a secret manager at runtime.
+  safer:      Reference secrets from a manager or CI secret store; never commit raw values.
+  confidence: HIGH
+  evidence:
+    app.env:3  defined here: STRIPE_API_KEY = sk****
+    app.env:3  raw secret material committed (value masked): sk_l****
+    app.env:3  owner markers: owner=platform-team
+  ...
+```
+
+The same scan renders to JSON, SARIF 2.1.0, HTML, an SVG badge, or an offline
+share blob via `--format` — all byte-for-byte reproducible:
+
+```sh
+go run ./cmd/nhi-ghost --format sarif internal/nhi/testdata   # CI-ingestible
+go run ./cmd/nhi-ghost --fail-on high internal/nhi/testdata   # exit 3 gates CI
+```
+
+What v0 discovers: GCP service-account key JSON, cloud IAM policy docs, GitHub
+Actions workflow identities, and generic credential assignments / provider
+token shapes. What it ranks: `secret-exposed`, `broad-permissions`,
+`secret-referenced`, `pull_request_target`-with-secrets, `ownership-gap`
+(INFERRED), and `stale-candidate` — the last raised **only** when trustworthy
+local timestamp/last-used evidence is present, never from mere absence of a
+reference, and never from the wall clock. See
+[`docs/specs/nhi-ghost.md`](docs/specs/nhi-ghost.md).
 
 ## What is intentionally *not* here
 
