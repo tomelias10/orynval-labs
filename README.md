@@ -12,7 +12,14 @@
 
 **Local-first security tools for identities, AI-agent configuration, and trust evidence.**
 
+[![CI](https://github.com/tomelias10/orynval-labs/actions/workflows/ci.yml/badge.svg)](https://github.com/tomelias10/orynval-labs/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Go](https://img.shields.io/badge/Go-1.27.1-00ADD8?logo=go&logoColor=white)](go.mod)
+[![Status](https://img.shields.io/badge/status-public%20preview-orange.svg)](#)
+
 [Website](https://orynval.com) · [Contact](mailto:tom@orynval.com)
+
+![Orynval Labs demo](demo.gif)
 
 </div>
 
@@ -22,6 +29,34 @@ and deterministic** — no agent to install, no data leaving your laptop, no
 account required. Point a tool at a directory, get a report in seconds.
 
 > Status: **public preview.** All three tools are runnable today. They are early-stage security tooling: review findings before acting on them and report reproducible false positives or missed detections.
+
+## Start here
+
+The fastest way to see the project is to run the synthetic `mcp-drift` demo:
+
+```sh
+git clone https://github.com/tomelias10/orynval-labs.git
+cd orynval-labs
+go run ./cmd/mcp-drift internal/mcp/testdata
+```
+
+That demo is **synthetic**. For a real scan, point the tool only at directories you own or are authorized to inspect:
+
+```sh
+go run ./cmd/mcp-drift /path/to/your/agent-configs
+```
+
+No account. No telemetry. No cloud upload. Discovered commands and servers are parsed as data and are **not executed**.
+
+### Pick a tool
+
+| Tool | What it helps find | Best first use |
+|---|---|---|
+| `mcp-drift` | risky MCP / AI-agent configuration, permission scope, secret exposure, baseline drift | audit local agent configs before they quietly become part of the attack surface |
+| `nhi-ghost` | risky non-human identities, broad permissions, exposed credential material, ownership gaps | inspect repositories and config trees for machine-identity risk |
+| `trust-proof` | unsupported or weakly-evidenced security questionnaire answers | draft grounded answers from approved local evidence and surface the gaps |
+
+If the tools are useful, a GitHub star is the simplest way to help other security engineers discover the project.
 
 ## Why these three
 
@@ -56,7 +91,7 @@ so it deploys in minutes instead of a quarter.
 
 Security questionnaires and evidence requests stall enterprise deals for weeks,
 and the answers are error-prone to assemble by hand. `trust-proof` ingests a
-questionnaire (CSV / XLSX / plain text) plus your **local, already-approved**
+questionnaire (CSV / Markdown / plain text) plus your **local, already-approved**
 evidence (SOC 2 excerpts, policies, security and architecture docs, READMEs),
 maps each question to explicit evidence, and drafts an answer **only when it is
 grounded in a cited source**. Anything unsupported is marked `UNKNOWN` rather
@@ -91,7 +126,7 @@ posture:
 
 Shared output formats: **terminal**, **JSON**, and **SARIF 2.1.0** (plus a
 self-contained HTML report, an SVG status badge, and an offline share blob).
-`trust-proof` additionally exports **CSV**, **XLSX**, and **Markdown**.
+`trust-proof` additionally exports **CSV** and **Markdown**. XLSX is specified in the design docs but is not implemented in the current public preview.
 
 ## Repository layout
 
@@ -269,6 +304,12 @@ detection; without one, those factors are skipped so there is no false noise.
 `pkg-safe` (a dependency/package-risk scanner) is parked in
 [`IDEA_PARKING_LOT.md`](IDEA_PARKING_LOT.md). The three wedges above are the
 focus; pkg-safe is not being built now.
+
+## Contributing
+
+Reproducible issues and focused pull requests are welcome — especially false positives, missed config shapes, safer remediations, and synthetic fixtures for additional agent/MCP ecosystems. See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR.
+
+For a suspected vulnerability in Orynval Labs itself, follow [SECURITY.md](SECURITY.md) instead of posting exploit details publicly.
 
 ## License
 
