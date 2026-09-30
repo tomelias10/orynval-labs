@@ -46,7 +46,14 @@ That demo is **synthetic**. For a real scan, point the tool only at directories 
 go run ./cmd/mcp-drift /path/to/your/agent-configs
 ```
 
-No account. No telemetry. No cloud upload. Discovered commands and servers are parsed as data and are **not executed**.
+Or install just the CLI you want:
+
+```sh
+go install github.com/tomelias10/orynval-labs/cmd/mcp-drift@latest
+mcp-drift /path/to/your/agent-configs
+```
+
+Installation downloads the Go module and dependencies once. Scanning itself is local-only: no account, no telemetry, no cloud upload, and discovered commands or servers are parsed as data and are **not executed**.
 
 ### Pick a tool
 
