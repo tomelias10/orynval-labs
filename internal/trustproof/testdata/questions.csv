@@ -1,0 +1,6 @@
+Question,Notes
+Do you require multi-factor authentication for production access?,control MFA
+How is customer data encrypted at rest?,encryption
+How often are backups tested and restored?,resilience
+Are vendor risk assessments performed for all subprocessors?,third-party
+Do you offer a public bug bounty program with monetary rewards?,out of scope
