@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/tomelias10/orynval-labs/internal/output"
 )
 
 // Exit codes are part of the CLI contract so CI can branch on them. They match
@@ -102,6 +104,9 @@ func Run(args []string, stdout, stderr io.Writer) int {
 
 	rep := newReport(answerAll(newCorpus(passages), qs, minConfidence))
 	content := render(format, rep)
+	if format == "terminal" {
+		content = output.TerminalBanner + "\n\n" + content + "\nNeed help reviewing a gap or finding?  https://orynval.com  |  tom@orynval.com\nInclude the tool name (trust-proof) and the smallest reproducible context you can safely share.\n"
+	}
 
 	if err := emit(content, format, out, stdout); err != nil {
 		fmt.Fprintln(stderr, "error: write output:", err)
