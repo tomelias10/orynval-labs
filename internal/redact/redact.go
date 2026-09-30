@@ -92,6 +92,9 @@ var assignQuoted = regexp.MustCompile(secretKeys + `(\s*[:=]\s*)([` + quoteChars
 // capturing key, separator, and value.
 var assignBare = regexp.MustCompile(secretKeys + `(\s*[:=]\s*)([^\s` + quoteChars + `,;]+)`)
 
+// urlUserinfo matches the password part of a URL's userinfo component.
+var urlUserinfo = regexp.MustCompile(`([A-Za-z][A-Za-z0-9+.\-]*://[^:/\s@]*:)([^@\s/]+)(@)`)
+
 // secretKeys is the leading, case-insensitive key alternation shared by both
 // assignment patterns, wrapped in a capturing group so the key text survives.
 const secretKeys = `(?i)((?:pass(?:word|wd|phrase)?|secret|token|api[_-]?key|apikey|access[_-]?key|auth[0-9a-z_]*|credentials?|client[_-]?secret|private[_-]?key|bearer)\b)`
@@ -111,6 +114,12 @@ func Redact(text string) string {
 	text = replaceSubmatch(assignBare, text, func(g []string) string {
 		// g: [full, key, sep, value]
 		return g[1] + g[2] + Mask(g[3])
+	})
+	// Mask passwords embedded in URL userinfo (scheme://user:password@host),
+	// e.g. database connection strings passed as command-line arguments.
+	text = replaceSubmatch(urlUserinfo, text, func(g []string) string {
+		// g: [full, prefix, password, at]
+		return g[1] + Mask(g[2]) + g[3]
 	})
 	// Then mask standalone token shapes.
 	for _, re := range secretPatterns {

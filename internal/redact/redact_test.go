@@ -135,3 +135,17 @@ func TestRedactIdempotentNoLeak(t *testing.T) {
 		t.Errorf("secret leaked after double redaction: %q", twice)
 	}
 }
+
+func TestRedactURLUserinfoPassword(t *testing.T) {
+	in := "npx -y server-postgres postgresql://admin:SyntheticPass123@db.internal.example:5432/prod"
+	out := Redact(in)
+	if strings.Contains(out, "SyntheticPass123") {
+		t.Fatalf("password leaked: %q", out)
+	}
+	if !strings.Contains(out, "postgresql://admin:") || !strings.Contains(out, "@db.internal.example:5432/prod") {
+		t.Fatalf("surrounding URL not preserved: %q", out)
+	}
+	if got := Redact("see https://example.com/docs"); got != "see https://example.com/docs" {
+		t.Fatalf("plain URL changed: %q", got)
+	}
+}

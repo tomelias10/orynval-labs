@@ -275,3 +275,23 @@ func TestDetectFactorsSkipsBaselineWhenAbsent(t *testing.T) {
 		t.Errorf("baseline-present clean server should be unapproved, got %+v", fs)
 	}
 }
+
+func TestPinnedRejectsMutableVersions(t *testing.T) {
+	cases := map[string]bool{
+		"@modelcontextprotocol/server-filesystem@1.0.0": true,
+		"quickstart-mcp@2.3.4-rc.1":                     true,
+		"mcp-server-fetch==0.6.2":                       true,
+		"@playwright/mcp@latest":                        false,
+		"some-mcp@next":                                 false,
+		"some-mcp@^1.2.0":                               false,
+		"some-mcp@1.x":                                  false,
+		"some-mcp@1":                                    false,
+		"@scope/pkg":                                    false,
+		"quickstart-mcp":                                false,
+	}
+	for pkg, want := range cases {
+		if got := pinned(pkg); got != want {
+			t.Errorf("pinned(%q) = %v, want %v", pkg, got, want)
+		}
+	}
+}
