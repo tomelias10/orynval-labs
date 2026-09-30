@@ -150,6 +150,53 @@ sets the bar to draft an answer and `--fail-on-gaps` exits `3` when any question
 is `UNKNOWN`. (XLSX ingest/export, described in
 [`docs/specs/trust-proof.md`](docs/specs/trust-proof.md), is specified but not
 part of this slice.)
+## Demo: `mcp-drift` in under 5 seconds
+
+`mcp-drift` audits local AI-agent / MCP server configs for risky scope and
+baseline drift. Point it at the synthetic fixture tree — no setup, no home
+directory, no network:
+
+```sh
+go run ./cmd/mcp-drift internal/mcp/testdata     # or: make demo-mcp
+```
+
+```text
+mcp-drift 0.1.0
+7 findings: 2 high, 2 medium, 3 info
+
+[HIGH] orynval.mcp.config-audit — MCP server "filesystem" — 1 risk factor(s): broad-filesystem-scope
+  where:      .mcp.json:3
+  fix:        Scope the server to the narrowest project subdirectory it needs instead of the root or home directory.
+  evidence:
+    .mcp.json:3  broad-filesystem-scope: filesystem scope granted to: /
+
+[HIGH] orynval.mcp.config-audit — MCP server "github" — 2 risk factor(s): secret-in-env, baseline-drift
+  where:      .mcp.json:7
+  evidence:
+    .mcp.json:7  secret-in-env: inline secret handed to server via env: GITHUB_TOKEN=gh****
+    .mcp.json:7  baseline-drift: server "github" config differs from its approved baseline signature (approved 000000000000, observed 45fab4632a3e)
+
+... plus MEDIUM (unpinned installer, remote endpoint, unapproved) and INFO inventory entries
+```
+
+The scan is read-only and offline: it parses each config **as data** and never
+runs a discovered `command`, resolves a discovered `url`, or validates a
+credential. The inline `GITHUB_TOKEN` is reported as drift and risk but its
+value is **masked in every format**.
+
+The same scan renders through the shared core in any format:
+
+```sh
+go run ./cmd/mcp-drift -f terminal internal/mcp/testdata   # human report (above)
+go run ./cmd/mcp-drift -f json     internal/mcp/testdata   # machine-readable findings
+go run ./cmd/mcp-drift -f sarif    internal/mcp/testdata   # SARIF 2.1.0 for code scanning
+go run ./cmd/mcp-drift -f html     internal/mcp/testdata > report.html   # self-contained report
+```
+
+Add `--fail-on high` to make the process exit `3` when any finding is at least
+that severity (exit `0` when clean) — ready for a CI gate. Drop a
+`.orynval/mcp-baseline.json` into the tree to turn on drift and unapproved-server
+detection; without one, those factors are skipped so there is no false noise.
 
 ## What is intentionally *not* here
 

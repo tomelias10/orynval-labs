@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "vscode-helper": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@acme/vscode-mcp@1.0.0"]
+    }
+  }
+}
