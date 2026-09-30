@@ -11,6 +11,17 @@ import (
 	"github.com/orynval/orynval-labs/internal/core"
 )
 
+// TerminalBanner is the suite-wide human-terminal header. It is intentionally
+// emitted only by terminal renderers; JSON, SARIF, HTML, badge, share, CSV, and
+// Markdown outputs remain machine-clean.
+const TerminalBanner = `  ██████╗ ██████╗ ██╗   ██╗███╗   ██╗██╗   ██╗ █████╗ ██╗
+ ██╔═══██╗██╔══██╗╚██╗ ██╔╝████╗  ██║██║   ██║██╔══██╗██║
+ ██║   ██║██████╔╝ ╚████╔╝ ██╔██╗ ██║██║   ██║███████║██║
+ ██║   ██║██╔══██╗  ╚██╔╝  ██║╚██╗██║╚██╗ ██╔╝██╔══██║██║
+ ╚██████╔╝██║  ██║   ██║   ██║ ╚████║ ╚████╔╝ ██║  ██║███████╗
+  ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝
+                     L  A  B  S`
+
 // severityColor maps a severity to a hex color used only in the colored
 // terminal path. The no-color path never consults it.
 func severityColor(s core.Severity) lipgloss.Color {
@@ -77,6 +88,8 @@ func RenderTerminal(w io.Writer, r Report, opts Options) error {
 	s := newStyler(w, opts.Color)
 
 	var b strings.Builder
+	b.WriteString(TerminalBanner)
+	b.WriteString("\n\n")
 	if r.Tool.Name != "" {
 		header := r.Tool.Name
 		if r.Tool.Version != "" {

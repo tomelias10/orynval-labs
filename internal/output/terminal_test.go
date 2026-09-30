@@ -15,8 +15,10 @@ func TestRenderTerminalNoColorStable(t *testing.T) {
 	if strings.Contains(out, "\x1b[") {
 		t.Errorf("no-color output contains an ANSI escape:\n%q", out)
 	}
-	// Header, summary, and severity tags are present.
+	// Suite banner, header, summary, and severity tags are present.
 	for _, want := range []string{
+		"██████╗ ██████╗",
+		"L  A  B  S",
 		"orynval-test 9.9.9",
 		"2 findings: 1 critical, 1 low",
 		"[CRITICAL]",

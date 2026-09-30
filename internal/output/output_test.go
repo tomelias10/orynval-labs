@@ -160,3 +160,13 @@ func TestRenderUnsupportedFormat(t *testing.T) {
 		t.Error("expected error for unsupported format")
 	}
 }
+
+func TestTerminalBannerNeverPollutesMachineFormats(t *testing.T) {
+	r := sampleReport()
+	for _, f := range []Format{FormatJSON, FormatSARIF, FormatHTML, FormatBadge, FormatShare} {
+		out := render(t, f, r, Options{})
+		if bytes.Contains(out, []byte("██████╗")) || bytes.Contains(out, []byte("L  A  B  S")) {
+			t.Errorf("format %q unexpectedly contains terminal banner", f)
+		}
+	}
+}

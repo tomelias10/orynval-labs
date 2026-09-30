@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+
+	"github.com/orynval/orynval-labs/internal/output"
 )
 
 // Summary is the run-level tally shown at the top of every report: how many
@@ -65,6 +67,8 @@ func render(format string, rep report) string {
 // and the list of remaining gaps.
 func renderTerminal(rep report) string {
 	var b strings.Builder
+	b.WriteString(output.TerminalBanner)
+	b.WriteString("\n\n")
 	b.WriteString("trust-proof — DRAFT (human review required; no claims auto-certified)\n\n")
 	s := rep.Summary
 	fmt.Fprintf(&b, "Questions: %d   Answered: %d   Gaps: %d   Coverage: %.0f%%\n",

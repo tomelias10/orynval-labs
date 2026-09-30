@@ -42,8 +42,14 @@ func TestRenderDispatch(t *testing.T) {
 	if !strings.HasPrefix(render("md", rep), "# trust-proof") {
 		t.Error("md render should start with title")
 	}
-	if !strings.Contains(render("terminal", rep), "DRAFT") {
-		t.Error("terminal render should contain DRAFT banner")
+	terminal := render("terminal", rep)
+	if !strings.Contains(terminal, "██████╗ ██████╗") || !strings.Contains(terminal, "DRAFT") {
+		t.Error("terminal render should contain Orynval banner and DRAFT label")
+	}
+	for _, format := range []string{"json", "csv", "md"} {
+		if strings.Contains(render(format, rep), "██████╗") {
+			t.Errorf("%s output must not contain terminal banner", format)
+		}
 	}
 	if !strings.Contains(render("unrecognized", rep), "DRAFT") {
 		t.Error("unknown format should fall back to terminal")
