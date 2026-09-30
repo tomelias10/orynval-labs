@@ -5,9 +5,7 @@ teams cannot easily see. Every tool runs **on your machine, read-only, offline,
 and deterministic** — no agent to install, no data leaving your laptop, no
 account required. Point a tool at a directory, get a report in seconds.
 
-> Status: **pre-launch, not published externally.** The shared detector core is
-> complete and green. Three product wedges have implementation specs and a
-> working vertical slice each. See [Status](#status).
+> Status: **public preview.** All three tools are runnable today. They are early-stage security tooling: review findings before acting on them and report reproducible false positives or missed detections.
 
 ## Why these three
 
@@ -50,7 +48,7 @@ than guessed. It produces a gap report and an exportable draft questionnaire.
 **No hallucinated compliance claims, no auto-certification, and nothing is
 uploaded anywhere** — grounding and citation are enforced, not aspirational.
 
-## Shared guarantees
+## Found something concerning?\n\nIf one of the tools surfaces a finding you want a second set of eyes on, **Orynval can review the report with you.** Before sharing, remove any customer data or secrets that are not already redacted.\n\n**Next step:** visit https://orynval.com and send the finding/report through the contact form. Include which tool you ran (`nhi-ghost`, `mcp-drift`, or `trust-proof`) and the smallest reproducible context you can safely share.\n\nThis is also where to report a false positive, missed detection, or deployment question.\n\n## Shared guarantees
 
 Every tool is built on one shared core (`internal/`) and inherits the same
 posture:
