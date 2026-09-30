@@ -1,0 +1,18 @@
+# Build output
+/bin/
+/dist/
+*.test
+*.out
+coverage.out
+
+# Go workspace / local tooling
+go.work
+go.work.sum
+
+# Transient session/build logs
+.claude-*.log
+*.log
+
+# Editor / OS cruft
+.DS_Store
+*.swp
