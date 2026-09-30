@@ -1,4 +1,20 @@
-# Orynval Labs
+<div align="center">
+
+```text
+ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗██╗   ██╗ █████╗ ██╗
+██╔═══██╗██╔══██╗╚██╗ ██╔╝████╗  ██║██║   ██║██╔══██╗██║
+██║   ██║██████╔╝ ╚████╔╝ ██╔██╗ ██║██║   ██║███████║██║
+██║   ██║██╔══██╗  ╚██╔╝  ██║╚██╗██║╚██╗ ██╔╝██╔══██║██║
+╚██████╔╝██║  ██║   ██║   ██║ ╚████║ ╚████╔╝ ██║  ██║███████╗
+ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝
+                         L  A  B  S
+```
+
+**Local-first security tools for identities, AI-agent configuration, and trust evidence.**
+
+[Website](https://orynval.com) · [Contact](mailto:tom@orynval.com)
+
+</div>
 
 Local-first security tooling for the risks that block deals and audits but that
 teams cannot easily see. Every tool runs **on your machine, read-only, offline,
