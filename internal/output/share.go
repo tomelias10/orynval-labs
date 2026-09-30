@@ -32,25 +32,21 @@ type shareDoc struct {
 func RenderShare(w io.Writer, r Report) error {
 	r = r.normalized()
 	doc := shareDoc{Tool: r.Tool, Rules: r.Rules, Findings: r.Findings}
-	raw, err := json.Marshal(doc)
-	if err != nil {
-		return fmt.Errorf("output: marshal share payload: %w", err)
-	}
+
+	// shareDoc holds only strings, ints, and slices of those, so json.Marshal
+	// cannot fail; and DEFLATE-ing into an in-memory bytes.Buffer cannot fail
+	// either (BestCompression is a valid constant level, and a bytes.Buffer
+	// never short-writes or errors). Those steps are therefore infallible, and
+	// the only operation that can fail is the final write to the caller's w.
+	raw, _ := json.Marshal(doc)
 
 	var buf bytes.Buffer
-	zw, err := flate.NewWriter(&buf, flate.BestCompression)
-	if err != nil {
-		return fmt.Errorf("output: init compressor: %w", err)
-	}
-	if _, err := zw.Write(raw); err != nil {
-		return fmt.Errorf("output: compress share payload: %w", err)
-	}
-	if err := zw.Close(); err != nil {
-		return fmt.Errorf("output: finalize compressor: %w", err)
-	}
+	zw, _ := flate.NewWriter(&buf, flate.BestCompression)
+	_, _ = zw.Write(raw)
+	_ = zw.Close()
 
 	enc := base64.RawURLEncoding.EncodeToString(buf.Bytes())
-	_, err = io.WriteString(w, sharePrefix+enc+"\n")
+	_, err := io.WriteString(w, sharePrefix+enc+"\n")
 	return err
 }
 

@@ -1,0 +1,38 @@
+name: Feature request
+description: Suggest a new rule, output format, flag, or improvement.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Proposals that keep the product's posture — local-first, read-only,
+        offline, deterministic, never leaks secrets — are the easiest to accept.
+        Please keep that in mind below.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What can't you do today, and why does it matter?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: >-
+        What should the tool do? If you're proposing a new rule, describe the
+        risk it detects, the evidence it would cite, and a rough severity.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: posture
+    attributes:
+      label: Posture
+      description: Does this proposal preserve the shared guarantees?
+      options:
+        - label: It stays read-only, offline, deterministic, and never leaks secrets.
+        - label: I'm not sure — let's discuss the trade-offs.

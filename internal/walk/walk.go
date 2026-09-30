@@ -133,10 +133,9 @@ func (w *Walker) Walk(fn func(abs, rel string) error) error {
 			return nil
 		}
 
-		rel, err := filepath.Rel(w.root, path)
-		if err != nil {
-			return nil
-		}
+		// path is w.root itself or a descendant of it and both are absolute, so
+		// filepath.Rel always succeeds here; the error cannot occur.
+		rel, _ := filepath.Rel(w.root, path)
 		return fn(path, filepath.ToSlash(rel))
 	})
 }

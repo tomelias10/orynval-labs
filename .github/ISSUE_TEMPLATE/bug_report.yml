@@ -1,0 +1,69 @@
+name: Bug report
+description: Report incorrect behavior, a crash, or a broken guarantee.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Thanks for filing a bug. **If this is a security vulnerability** — a
+        secret leaking into output, the scanner reading outside its root, or any
+        write/exec/network behavior — stop and report it privately instead (see
+        SECURITY.md). For an inaccurate detector result (false positive or false
+        negative), please use the "Detector accuracy" template instead.
+  - type: input
+    id: tool
+    attributes:
+      label: Tool / package
+      description: Which tool or shared-core package is affected?
+      placeholder: "nhi-ghost, or internal/output, ..."
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: "v0.1.0 or the short commit hash"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you observe, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: >-
+        Exact command(s) and a minimal, SYNTHETIC input tree. Never paste real
+        secrets or customer data — use obviously-fake, documentation-style
+        values.
+      placeholder: |
+        1. Create a tree: ...
+        2. Run: nhi-ghost --format json ./tree
+        3. Observe: ...
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant output
+      description: The command output (redact anything genuinely sensitive).
+      render: text
+  - type: input
+    id: env
+    attributes:
+      label: OS and Go version
+      placeholder: "linux/amd64, go1.27.1"
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: This is not a security vulnerability (those go through SECURITY.md).
+          required: true
+        - label: My reproduction uses only synthetic data — no real secrets.
+          required: true
