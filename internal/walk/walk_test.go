@@ -1,6 +1,7 @@
 package walk
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -130,6 +131,16 @@ func TestWalkNeverFollowsSymlinkOutsideRoot(t *testing.T) {
 	// root once (here /tmp -> /private/tmp on macOS), so yielded absolute paths
 	// are rooted there, not at the raw t.TempDir() path.
 	assertSameSet(t, relOf(w.Root(), readAbs), []string{"real.txt"})
+}
+
+func TestNewReportsAbsFailure(t *testing.T) {
+	want := errors.New("abs failed")
+	_, err := newWalker("relative-root", Options{}, func(string) (string, error) {
+		return "", want
+	})
+	if err == nil || !strings.Contains(err.Error(), "walk: resolve root: abs failed") {
+		t.Fatalf("newWalker error = %v, want wrapped resolve-root error", err)
+	}
 }
 
 func TestNewRejectsNonDir(t *testing.T) {

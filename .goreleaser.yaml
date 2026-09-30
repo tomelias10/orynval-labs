@@ -1,0 +1,101 @@
+# GoReleaser configuration for Orynval Labs.
+# https://goreleaser.com
+#
+# Builds the three tools as static, reproducible binaries. Nothing here reaches
+# the network at runtime; the release artifacts are the same offline, read-only
+# tools described in the README. Builds are reproducible (trimmed paths, pinned
+# module timestamp, no CGO) so a given tag produces byte-stable binaries.
+#
+# The cmd/* main packages land as each tool is wired up from the shared core;
+# `goreleaser check` validates this file today, and `goreleaser release` produces
+# artifacts once the corresponding cmd/ directory exists.
+version: 2
+
+project_name: orynval-labs
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - id: nhi-ghost
+    main: ./cmd/nhi-ghost
+    binary: nhi-ghost
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+
+  - id: mcp-drift
+    main: ./cmd/mcp-drift
+    binary: mcp-drift
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+
+  - id: trust-proof
+    main: ./cmd/trust-proof
+    binary: trust-proof
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: >-
+      {{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    files:
+      - README.md
+      - LICENSE
+      - SECURITY.md
+      - PRIVACY.md
+      - THREAT_MODEL.md
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+source:
+  enabled: true
+
+sboms:
+  - artifacts: archive
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "Merge pull request"
+
+release:
+  draft: true
+  prerelease: auto
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-snapshot"

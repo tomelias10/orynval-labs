@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability (private)
+    url: https://github.com/orynval/orynval-labs/security/advisories/new
+    about: >-
+      Do NOT open a public issue for a security vulnerability — including any
+      secret leak, scan-root escape, or unexpected write/exec/network behavior.
+      Report it privately. See SECURITY.md.
+  - name: Question or discussion
+    url: https://github.com/orynval/orynval-labs/discussions
+    about: For usage questions and open-ended discussion (not bug reports).

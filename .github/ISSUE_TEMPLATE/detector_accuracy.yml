@@ -1,0 +1,55 @@
+name: Detector accuracy (false positive / false negative)
+description: A rule flagged something it should not have, or missed something it should have caught.
+labels: ["detector-accuracy"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Detector accuracy is a correctness bug, not a security boundary issue —
+        thanks for helping tighten it. Please describe the case with a minimal,
+        **synthetic** example (never real secrets or customer data).
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - False positive (flagged something benign)
+        - False negative (missed something real)
+    validations:
+      required: true
+  - type: input
+    id: rule
+    attributes:
+      label: Rule ID (if known)
+      placeholder: "orynval.nhi.broad-permissions"
+  - type: input
+    id: tool
+    attributes:
+      label: Tool and version
+      placeholder: "nhi-ghost v0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Minimal synthetic input
+      description: The file content or tree that triggers (or fails to trigger) the finding.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should happen
+      description: >-
+        For a false positive, why is this benign? For a false negative, what is
+        the risk that should have been flagged, and at what severity?
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: The example above is synthetic — no real secrets or customer data.
+          required: true
