@@ -1,0 +1,11 @@
+{
+  "PolicyName": "AdminEverything",
+  "Statement": [
+    {
+      "Sid": "AllowAll",
+      "Effect": "Allow",
+      "Action": "*",
+      "Resource": "*"
+    }
+  ]
+}
