@@ -24,8 +24,11 @@ jobs:
           go-version-file: go.mod
           check-latest: true
 
+      - name: Install Syft for release SBOMs
+        uses: anchore/sbom-action/download-syft@v0
+
       - name: Release with GoReleaser
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@v7
         with:
           distribution: goreleaser
           version: "~> v2"
