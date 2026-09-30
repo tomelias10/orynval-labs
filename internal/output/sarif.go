@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 // SARIF 2.1.0 output. The schema is static and no run timestamps are emitted,

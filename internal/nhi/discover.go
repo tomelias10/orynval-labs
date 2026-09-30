@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/orynval/orynval-labs/internal/core"
-	"github.com/orynval/orynval-labs/internal/redact"
+	"github.com/tomelias10/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/redact"
 )
 
 // discover walks the tree once, extracts every identity it can observe, then

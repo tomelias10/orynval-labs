@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 func TestSeverityFor(t *testing.T) {

@@ -18,9 +18,9 @@ import (
 
 	"github.com/mattn/go-isatty"
 
-	"github.com/orynval/orynval-labs/internal/core"
-	"github.com/orynval/orynval-labs/internal/output"
-	"github.com/orynval/orynval-labs/internal/walk"
+	"github.com/tomelias10/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/output"
+	"github.com/tomelias10/orynval-labs/internal/walk"
 )
 
 // Exit codes. These are part of the CLI contract so CI can branch on them.

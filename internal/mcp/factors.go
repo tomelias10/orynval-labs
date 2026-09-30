@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/orynval/orynval-labs/internal/core"
-	"github.com/orynval/orynval-labs/internal/redact"
+	"github.com/tomelias10/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/redact"
 )
 
 // factor is one risk observation about a server. A finding's severity is the max

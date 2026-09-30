@@ -3,8 +3,8 @@ package nhi
 import (
 	"strings"
 
-	"github.com/orynval/orynval-labs/internal/core"
-	"github.com/orynval/orynval-labs/internal/redact"
+	"github.com/tomelias10/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/redact"
 )
 
 // assess turns a discovered identity into exactly one finding: it enumerates

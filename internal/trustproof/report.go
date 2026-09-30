@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/orynval/orynval-labs/internal/output"
+	"github.com/tomelias10/orynval-labs/internal/output"
 )
 
 // Summary is the run-level tally shown at the top of every report: how many

@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 // decodeSARIF parses SARIF output into a loosely-typed structure for assertions.

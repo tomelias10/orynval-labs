@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/orynval/orynval-labs/internal/core"
-	"github.com/orynval/orynval-labs/internal/output"
-	"github.com/orynval/orynval-labs/internal/walk"
+	"github.com/tomelias10/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/output"
+	"github.com/tomelias10/orynval-labs/internal/walk"
 )
 
 // newContext builds a scan context rooted at dir using the shared safe walker.

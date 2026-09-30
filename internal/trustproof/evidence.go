@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/orynval/orynval-labs/internal/walk"
+	"github.com/tomelias10/orynval-labs/internal/walk"
 )
 
 // stopwords are common English function words dropped before matching so that

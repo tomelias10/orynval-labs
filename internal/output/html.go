@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 // RenderHTML writes a self-contained HTML report with inline CSS and no

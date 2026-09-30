@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 // markerRule flags every line in every file that contains a marker substring.

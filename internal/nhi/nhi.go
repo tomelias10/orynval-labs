@@ -25,8 +25,8 @@
 package nhi
 
 import (
-	"github.com/orynval/orynval-labs/internal/cli"
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/cli"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 // Version is the nhi-ghost release version, surfaced by --version and embedded
@@ -34,7 +34,7 @@ import (
 const Version = "0.1.0"
 
 // informationURI is the tool's documentation anchor, embedded in SARIF/HTML.
-const informationURI = "https://github.com/orynval/orynval-labs/blob/main/docs/specs/nhi-ghost.md"
+const informationURI = "https://github.com/tomelias10/orynval-labs/blob/main/docs/specs/nhi-ghost.md"
 
 // RuleID is the stable identifier of the one composite rule nhi-ghost ships in
 // v0. Discovery and assessment are correlated into a single identity-centric

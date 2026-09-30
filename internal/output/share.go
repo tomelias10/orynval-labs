@@ -9,7 +9,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 // sharePrefix tags a share blob with a scheme and version so a decoder can

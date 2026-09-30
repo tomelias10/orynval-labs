@@ -18,7 +18,7 @@ package main
 import (
 	"os"
 
-	"github.com/orynval/orynval-labs/internal/nhi"
+	"github.com/tomelias10/orynval-labs/internal/nhi"
 )
 
 // exit is indirected through a variable so a test can observe the process exit

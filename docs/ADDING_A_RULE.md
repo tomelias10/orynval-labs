@@ -113,7 +113,7 @@ tool := cli.Tool{
     Name:           "nhi-ghost",
     Version:        version,
     Summary:        "Non-Human Identity risk, seen locally",
-    InformationURI: "https://github.com/orynval/orynval-labs",
+    InformationURI: "https://github.com/tomelias10/orynval-labs",
     Rules: []core.Rule{
         broadPermissionsRule{},
         staleCredentialRule{},

@@ -13,9 +13,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/orynval/orynval-labs/internal/cli"
-	"github.com/orynval/orynval-labs/internal/core"
-	"github.com/orynval/orynval-labs/internal/mcp"
+	"github.com/tomelias10/orynval-labs/internal/cli"
+	"github.com/tomelias10/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/mcp"
 )
 
 // version is the tool's reported version. It is a build-time constant; mcp-drift
@@ -38,7 +38,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 		Name:           "mcp-drift",
 		Version:        version,
 		Summary:        "audit local AI-agent / MCP server configs for risky scope and baseline drift (read-only, offline)",
-		InformationURI: "https://github.com/orynval/orynval-labs",
+		InformationURI: "https://github.com/tomelias10/orynval-labs",
 		Rules:          []core.Rule{mcp.NewRule()},
 	}
 	return tool.Run(args, stdout, stderr)

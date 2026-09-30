@@ -14,7 +14,7 @@ package main
 import (
 	"os"
 
-	"github.com/orynval/orynval-labs/internal/trustproof"
+	"github.com/tomelias10/orynval-labs/internal/trustproof"
 )
 
 // exit is a seam over os.Exit so main's exit-code wiring can be tested without

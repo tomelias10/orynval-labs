@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/orynval/orynval-labs/internal/redact"
+	"github.com/tomelias10/orynval-labs/internal/redact"
 )
 
 // Citation is a single evidence source backing an answer: the file and line it

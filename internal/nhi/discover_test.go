@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 // fakeWalker yields caller-controlled (abs, rel) pairs, letting tests reach the

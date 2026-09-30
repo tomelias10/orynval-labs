@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/orynval/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
 // leakSecret is an obviously-fake, documentation-style AWS key id used across

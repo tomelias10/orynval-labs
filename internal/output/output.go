@@ -15,8 +15,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/orynval/orynval-labs/internal/core"
-	"github.com/orynval/orynval-labs/internal/redact"
+	"github.com/tomelias10/orynval-labs/internal/core"
+	"github.com/tomelias10/orynval-labs/internal/redact"
 )
 
 // ToolInfo identifies the tool that produced a report. It is embedded in every
