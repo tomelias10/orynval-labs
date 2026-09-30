@@ -128,6 +128,9 @@ func RenderTerminal(w io.Writer, r Report, opts Options) error {
 		}
 	}
 
+	b.WriteString("\nNeed help reviewing a finding?  https://orynval.com  |  tom@orynval.com\n")
+	b.WriteString("Include the tool name and the smallest reproducible context you can safely share.\n")
+
 	_, err := io.WriteString(w, b.String())
 	return err
 }
