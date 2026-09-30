@@ -100,6 +100,57 @@ make demo       # run all three tools against their synthetic fixtures
 Every fixture under `testdata/` is **synthetic** — no real secrets, no real
 customer data.
 
+## `trust-proof` demo (under 5 seconds)
+
+One command answers a synthetic questionnaire from a synthetic, already-approved
+evidence corpus — fully offline, no LLM, no network:
+
+```sh
+make demo-trust
+# or directly:
+go run ./cmd/trust-proof \
+  --questions internal/trustproof/testdata/questions.csv \
+  --evidence  internal/trustproof/testdata/evidence
+```
+
+Sample output:
+
+```text
+trust-proof — DRAFT (human review required; no claims auto-certified)
+
+Questions: 5   Answered: 3   Gaps: 2   Coverage: 60%
+
+Answered (grounded in cited evidence):
+  [HIGH] Do you require multi-factor authentication for production access?
+        ↳ access-control.md:3: "All production access requires single sign-on (SSO) with hardware multi-factor authentication. ..."
+  [HIGH] How is customer data encrypted at rest?
+        ↳ encryption.md:3: "Customer data is encrypted at rest using AES-256 and in transit using TLS 1.2 or higher. ..."
+  [MEDIUM] How often are backups tested and restored?
+        ↳ backup-policy.txt:6: "Backups are tested monthly by restoring them to an isolated environment ... The restore runbook token is ghp_**** and must never be shared."
+
+Gaps (no grounded evidence — answer manually):
+  [UNKNOWN] Are vendor risk assessments performed for all subprocessors?
+  [UNKNOWN] Do you offer a public bug bounty program with monetary rewards?
+```
+
+What the demo shows:
+
+- **Grounded answers only.** Each answer is *extractive* — quoted from a cited
+  `file:line` — never generated. Matching is deterministic TF-IDF term overlap.
+- **`UNKNOWN` over wrong.** The bug-bounty question has no supporting evidence,
+  and the vendor-risk question matches two files identically (an ambiguous tie);
+  both are reported as gaps rather than guessed.
+- **Secrets stay masked.** A token planted in the backup evidence renders as
+  `ghp_****` in the citation.
+
+This vertical slice accepts questionnaires as **CSV, Markdown, or plain text**
+(`--questions`) and exports the draft as **terminal, JSON, CSV, or Markdown**
+(`--format`, with `--out` for file formats). `--min-confidence {high|medium|low}`
+sets the bar to draft an answer and `--fail-on-gaps` exits `3` when any question
+is `UNKNOWN`. (XLSX ingest/export, described in
+[`docs/specs/trust-proof.md`](docs/specs/trust-proof.md), is specified but not
+part of this slice.)
+
 ## What is intentionally *not* here
 
 `pkg-safe` (a dependency/package-risk scanner) is parked in

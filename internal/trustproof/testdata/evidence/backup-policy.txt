@@ -1,0 +1,8 @@
+Backup and Recovery Policy (synthetic)
+
+Production databases are backed up every six hours to encrypted, versioned
+object storage in a separate region.
+
+Backups are tested monthly by restoring them to an isolated environment and
+verifying integrity. The restore runbook token is
+ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 and must never be shared.
