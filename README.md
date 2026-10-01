@@ -33,6 +33,18 @@ mcp-drift ~/your-project
 That's it. Point it at any folder with `.cursor/mcp.json`, `.mcp.json`, `.vscode/mcp.json` or similar agent configs.
 Prebuilt binaries for macOS, Linux and Windows are on the [Releases](https://github.com/tomelias10/orynval-labs/releases) page.
 
+### Catch silent config changes
+
+Approve what is configured today, then let mcp-drift tell you when anything changes, such as a server's URL quietly rewritten to point somewhere else:
+
+```sh
+mkdir -p .orynval
+mcp-drift --print-baseline . > .orynval/mcp-baseline.json   # approve the current servers
+mcp-drift .                                                  # later: any change shows up as baseline-drift
+```
+
+`--print-baseline` only prints. mcp-drift never writes into the tree it scans; you choose where the baseline lives and commit it like any other approved config.
+
 Want to see it first, with no real data? Run the synthetic demo:
 
 ```sh

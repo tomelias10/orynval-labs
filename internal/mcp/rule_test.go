@@ -309,3 +309,51 @@ func writeFile(t *testing.T, root, rel, content string) {
 		t.Fatal(err)
 	}
 }
+
+func TestBaselineJSONRoundTrip(t *testing.T) {
+	dir := t.TempDir()
+	writeFile(t, dir, ".mcp.json", `{"mcpServers":{"fs":{"command":"node","args":["s.js"]},"remote":{"url":"https://h.example/sse"}}}`)
+	writeFile(t, dir, "sub/.mcp.json", `{"mcpServers":{"fs":{"command":"other"}}}`)
+
+	out := BaselineJSON(newContext(t, dir))
+	b, ok := parseBaseline(out)
+	if !ok || len(b.Servers) != 2 {
+		t.Fatalf("baseline should list 2 servers (first occurrence wins): %s", out)
+	}
+	if b.Servers["fs"] != signature(rawServer{Command: "node", Args: []string{"s.js"}}) {
+		t.Errorf("fs signature should come from the first config in walk order: %s", out)
+	}
+
+	// Writing the printed baseline makes a tree with unique server names
+	// drift-free. (Two configs sharing a name with different content will
+	// always show drift for one of them: the baseline is keyed by name.)
+	writeFile(t, dir, "sub/.mcp.json", `{}`)
+	writeFile(t, dir, ".orynval/mcp-baseline.json", string(out))
+	for _, f := range NewRule().Evaluate(newContext(t, dir)) {
+		for _, e := range f.Evidence {
+			if strings.Contains(e.Snippet, "baseline-drift") || strings.Contains(e.Snippet, "unapproved-server") {
+				t.Errorf("a freshly printed baseline must not report drift: %s", e.Snippet)
+			}
+		}
+	}
+
+	// The baseline file itself is never treated as a config, so re-printing
+	// with it present yields the same document.
+	if again := BaselineJSON(newContext(t, dir)); string(again) != string(out) {
+		t.Errorf("re-printed baseline changed:\n%s\nvs\n%s", again, out)
+	}
+
+	// A changed URL now drifts.
+	writeFile(t, dir, ".mcp.json", `{"mcpServers":{"fs":{"command":"node","args":["s.js"]},"remote":{"url":"http://attacker.example/mcp"}}}`)
+	drifted := false
+	for _, f := range NewRule().Evaluate(newContext(t, dir)) {
+		for _, e := range f.Evidence {
+			if strings.Contains(e.Snippet, `baseline-drift: server "remote"`) {
+				drifted = true
+			}
+		}
+	}
+	if !drifted {
+		t.Error("a rewritten URL should be reported as baseline drift")
+	}
+}

@@ -188,3 +188,27 @@ func TestColorEnabled(t *testing.T) {
 		t.Error("never should force color off")
 	}
 }
+
+func TestRunPrintBaseline(t *testing.T) {
+	dir := treeWith(t, map[string]string{"a.txt": "MARK"})
+	tl := tool("MARK", core.SeverityHigh)
+
+	// Without the hook the flag does not exist.
+	if code, _, _ := run(t, tl, "--print-baseline", dir); code != ExitError {
+		t.Errorf("--print-baseline without a hook should be a usage error, got %d", code)
+	}
+
+	tl.PrintBaseline = func(ctx *core.Context) []byte { return []byte("BASELINE " + filepath.Base(ctx.Root) + "\n") }
+	code, out, _ := run(t, tl, "--print-baseline", dir)
+	if code != ExitOK || out != "BASELINE "+filepath.Base(dir)+"\n" {
+		t.Errorf("print-baseline: code %d, out %q", code, out)
+	}
+	if strings.Contains(out, "MARK") || strings.Contains(out, "finding") {
+		t.Error("print-baseline must not run the scan report")
+	}
+
+	var errb bytes.Buffer
+	if code := tl.Run([]string{"--print-baseline", dir}, failWriter{}, &errb); code != ExitError || !strings.Contains(errb.String(), "error:") {
+		t.Errorf("a failed write should be an error, got %d %q", code, errb.String())
+	}
+}
