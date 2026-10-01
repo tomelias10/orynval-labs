@@ -1,69 +1,66 @@
 <div align="center">
 
-```text
- ██████╗ ██████╗ ██╗   ██╗███╗   ██╗██╗   ██╗ █████╗ ██╗
-██╔═══██╗██╔══██╗╚██╗ ██╔╝████╗  ██║██║   ██║██╔══██╗██║
-██║   ██║██████╔╝ ╚████╔╝ ██╔██╗ ██║██║   ██║███████║██║
-██║   ██║██╔══██╗  ╚██╔╝  ██║╚██╗██║╚██╗ ██╔╝██╔══██║██║
-╚██████╔╝██║  ██║   ██║   ██║ ╚████║ ╚████╔╝ ██║  ██║███████╗
- ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝
-                         L  A  B  S
-```
+<img src="docs/assets/banner.png" alt="Orynval Labs: security scanners for the AI-agent era. Local, read-only, free." width="100%">
 
-**Local-first security tools for identities, AI-agent configuration, and trust evidence.**
+<h3>Find what your AI agents can reach, before someone else does.</h3>
 
 [![CI](https://github.com/tomelias10/orynval-labs/actions/workflows/ci.yml/badge.svg)](https://github.com/tomelias10/orynval-labs/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/tomelias10/orynval-labs?color=4d8dff)](https://github.com/tomelias10/orynval-labs/releases)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Go](https://img.shields.io/badge/Go-1.27.1-00ADD8?logo=go&logoColor=white)](go.mod)
-[![Status](https://img.shields.io/badge/status-public%20preview-orange.svg)](#)
+[![Stars](https://img.shields.io/github/stars/tomelias10/orynval-labs?style=flat&color=ffb020)](https://github.com/tomelias10/orynval-labs/stargazers)
 
-[Website](https://orynval.com) · [Contact](mailto:tom@orynval.com)
-
-![Orynval Labs demo](demo.gif)
+**[Quick start](#-quick-start)** · **[The tools](#-the-tools)** · **[Guarantees](#shared-guarantees)** · **[Website](https://orynval.com)** · **[Report a finding](#found-something-concerning)**
 
 </div>
 
-Local-first security tooling for the risks that block deals and audits but that
-teams cannot easily see. Every tool runs **on your machine, read-only, offline,
-and deterministic** — no agent to install, no data leaving your laptop, no
-account required. Point a tool at a directory, get a report in seconds.
+---
 
-> Status: **public preview.** All three tools are runnable today. They are early-stage security tooling: review findings before acting on them and report reproducible false positives or missed detections.
+Your code goes through review. The config that decides what your AI editor runs usually doesn't.
+`npx -y` with no version, tokens pasted into JSON, filesystem servers pointed at your whole home folder.
+Orynval Labs is three small Go CLIs that read those files and tell you what they found.
+**No account. No cloud. No telemetry. Nothing it discovers is ever executed.**
 
-## Start here
+> **Public preview.** All three tools run today. Review findings before acting on them, and please report false positives or missed detections.
 
-The fastest way to see the project is to run the synthetic `mcp-drift` demo:
-
-```sh
-git clone https://github.com/tomelias10/orynval-labs.git
-cd orynval-labs
-go run ./cmd/mcp-drift internal/mcp/testdata
-```
-
-That demo is **synthetic**. For a real scan, point the tool only at directories you own or are authorized to inspect:
-
-```sh
-go run ./cmd/mcp-drift /path/to/your/agent-configs
-```
-
-Or install just the CLI you want:
+## ⚡ Quick start
 
 ```sh
 go install github.com/tomelias10/orynval-labs/cmd/mcp-drift@latest
-mcp-drift /path/to/your/agent-configs
+mcp-drift ~/your-project
 ```
 
-Installation downloads the Go module and dependencies once. Scanning itself is local-only: no account, no telemetry, no cloud upload, and discovered commands or servers are parsed as data and are **not executed**.
+That's it. Point it at any folder with `.cursor/mcp.json`, `.mcp.json`, `.vscode/mcp.json` or similar agent configs.
+Prebuilt binaries for macOS, Linux and Windows are on the [Releases](https://github.com/tomelias10/orynval-labs/releases) page.
 
-### Pick a tool
+Want to see it first, with no real data? Run the synthetic demo:
 
-| Tool | What it helps find | Best first use |
-|---|---|---|
-| `mcp-drift` | risky MCP / AI-agent configuration, permission scope, secret exposure, baseline drift | audit local agent configs before they quietly become part of the attack surface |
-| `nhi-ghost` | risky non-human identities, broad permissions, exposed credential material, ownership gaps | inspect repositories and config trees for machine-identity risk |
-| `trust-proof` | unsupported or weakly-evidenced security questionnaire answers | draft grounded answers from approved local evidence and surface the gaps |
+```sh
+git clone https://github.com/tomelias10/orynval-labs.git && cd orynval-labs
+go run ./cmd/mcp-drift internal/mcp/testdata
+```
 
-If the tools are useful, a GitHub star is the simplest way to help other security engineers discover the project.
+<div align="center">
+<img src="docs/assets/mcp-drift-receipt.png" alt="mcp-drift scan of a synthetic config: 6 of 6 servers flagged, 2 high, 4 medium" width="560">
+<br><sub>Real mcp-drift output on a synthetic config. No real company data.</sub>
+</div>
+
+## 🧰 The tools
+
+| | Tool | What it catches | Run it |
+|---|---|---|---|
+| 🔌 | **`mcp-drift`** | Unpinned `npx -y` installs and `@latest` tags, tokens inline in config, filesystem scope on `~` or `/`, `curl \| bash` launchers, remote endpoints, drift from an approved baseline | `mcp-drift <dir>` |
+| 👻 | **`nhi-ghost`** | Service accounts, API keys and CI identities with broad permissions, no owner, or exposed credential material, plus their observed local blast radius | `nhi-ghost <dir>` |
+| 📋 | **`trust-proof`** | Security questionnaire answers drafted only from your approved local evidence, with citations. Anything unsupported is marked `UNKNOWN` | `trust-proof --questions q.csv --evidence ./docs` |
+
+Every tool outputs **terminal**, **JSON** and **SARIF 2.1.0**, so it drops straight into GitHub code scanning or any CI:
+
+```sh
+mcp-drift -f sarif . > mcp-drift.sarif   # upload to code scanning
+mcp-drift --fail-on high .               # exit 3 fails the build
+```
+
+If a tool saved you time, a ⭐ is the simplest way to help other engineers find it.
 
 ## Why these three
 
@@ -321,3 +318,9 @@ For a suspected vulnerability in Orynval Labs itself, follow [SECURITY.md](SECUR
 ## License
 
 [Apache 2.0](LICENSE).
+
+## Star history
+
+<a href="https://star-history.com/#tomelias10/orynval-labs&Date">
+  <img src="https://api.star-history.com/svg?repos=tomelias10/orynval-labs&type=Date" alt="Star history chart" width="600">
+</a>
