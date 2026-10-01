@@ -30,7 +30,7 @@ Orynval Labs is three small Go CLIs that read those files and tell you what they
 ## ⚡ Quick start
 
 ```sh
-go install github.com/tomelias10/orynval-labs/cmd/mcp-drift@latest
+go install github.com/tomelias10/orynval-labs/cmd/mcp-drift@v0.1.2
 mcp-drift ~/your-project
 ```
 
