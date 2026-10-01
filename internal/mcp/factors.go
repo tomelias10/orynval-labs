@@ -175,18 +175,27 @@ func autoApprove(joined string) bool {
 // npm scoped packages ("@scope/name@version"), plain npm ("name@version"), and
 // uv ("name==version").
 func pinned(pkg string) bool {
+	if i := strings.Index(pkg, "=="); i >= 0 {
+		// PEP 440 "==" is an exact pin unless it carries a wildcard (==1.*).
+		v := pkg[i+2:]
+		return v != "" && !strings.Contains(v, "*")
+	}
 	p := pkg
 	if strings.HasPrefix(p, "@") {
 		p = p[1:] // drop the scope's leading '@' so only a version '@' remains
 	}
-	if strings.Contains(p, "@") {
-		return true
+	i := strings.LastIndex(p, "@")
+	if i < 0 {
+		return false
 	}
-	if strings.Contains(pkg, "==") {
-		return true
-	}
-	return false
+	// A dist-tag ("latest", "next") or a range ("^1.2.0", "1.x", "1") is
+	// mutable: it resolves to whatever is published at launch time.
+	return exactVersion.MatchString(p[i+1:])
 }
+
+// exactVersion matches an exact, immutable version such as 1.2.3 or
+// v1.2.3-rc.1. Dist-tags and ranges do not match.
+var exactVersion = regexp.MustCompile(`^v?[0-9]+\.[0-9]+\.[0-9]+([-+][0-9A-Za-z.\-]+)?$`)
 
 // firstPackageArg returns the first non-flag argument, which for npx/uvx is the
 // package spec being installed and run.
