@@ -3,24 +3,44 @@ package output
 import (
 	"fmt"
 	"io"
+	"os"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/mattn/go-isatty"
 	"github.com/muesli/termenv"
 
 	"github.com/tomelias10/orynval-labs/internal/core"
 )
 
-// TerminalBanner is the suite-wide human-terminal header. It is intentionally
-// emitted only by terminal renderers; JSON, SARIF, HTML, badge, share, CSV, and
-// Markdown outputs remain machine-clean.
-const TerminalBanner = `  ██████╗ ██████╗ ██╗   ██╗███╗   ██╗██╗   ██╗ █████╗ ██╗
- ██╔═══██╗██╔══██╗╚██╗ ██╔╝████╗  ██║██║   ██║██╔══██╗██║
- ██║   ██║██████╔╝ ╚████╔╝ ██╔██╗ ██║██║   ██║███████║██║
- ██║   ██║██╔══██╗  ╚██╔╝  ██║╚██╗██║╚██╗ ██╔╝██╔══██║██║
- ╚██████╔╝██║  ██║   ██║   ██║ ╚████║ ╚████╔╝ ██║  ██║███████╗
-  ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝╚══════╝
-                     L  A  B  S`
+// Banner returns the compact Orynval identity printed above human terminal
+// reports: a small explorer mascot (two vertical eyes, no mouth) beside the
+// tool name and the suite's guarantees. Three lines, so findings stay on
+// screen. Callers print it only when the destination is an interactive
+// terminal (see IsTerminal); piped, redirected, and machine formats
+// (JSON, SARIF, HTML, badge, share, CSV, Markdown) never contain it.
+func Banner(tool, version string) string {
+	name := "ORYNVAL LABS"
+	if tool != "" {
+		name += " · " + tool
+		if version != "" {
+			name += " " + version
+		}
+	}
+	return " ╭─────╮\n" +
+		" │ ▌ ▐ │  " + name + "\n" +
+		" ╰─────╯  local · read-only · offline\n"
+}
+
+// isTerminal is indirected so tests can exercise the interactive branch.
+var isTerminal = isatty.IsTerminal
+
+// IsTerminal reports whether w is an interactive terminal. Anything that is
+// not an *os.File (buffers, pipes wrapped in writers) is never a terminal.
+func IsTerminal(w io.Writer) bool {
+	f, ok := w.(*os.File)
+	return ok && isTerminal(f.Fd())
+}
 
 // severityColor maps a severity to a hex color used only in the colored
 // terminal path. The no-color path never consults it.
@@ -73,6 +93,14 @@ func (s styler) bold(text string) string {
 	return s.re.NewStyle().Bold(true).Render(text)
 }
 
+// accent colors text in the Orynval cyan; used only for the banner.
+func (s styler) accent(text string) string {
+	if !s.color {
+		return text
+	}
+	return s.re.NewStyle().Foreground(lipgloss.Color("#22D3EE")).Render(text)
+}
+
 func (s styler) faint(text string) string {
 	if !s.color {
 		return text
@@ -88,9 +116,10 @@ func RenderTerminal(w io.Writer, r Report, opts Options) error {
 	s := newStyler(w, opts.Color)
 
 	var b strings.Builder
-	b.WriteString(TerminalBanner)
-	b.WriteString("\n\n")
-	if r.Tool.Name != "" {
+	if opts.Banner {
+		b.WriteString(s.accent(Banner(r.Tool.Name, r.Tool.Version)))
+		b.WriteString("\n")
+	} else if r.Tool.Name != "" {
 		header := r.Tool.Name
 		if r.Tool.Version != "" {
 			header += " " + r.Tool.Version

@@ -3,6 +3,7 @@ package trustproof
 import (
 	"bytes"
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -167,5 +168,29 @@ func TestEmitStdoutSuccess(t *testing.T) {
 	// terminal output ignores --out and goes to stdout.
 	if buf.String() != "hello" {
 		t.Errorf("emit wrote %q", buf.String())
+	}
+}
+
+func TestRunTerminalBannerOnlyOnTTY(t *testing.T) {
+	args := []string{"--questions", "testdata/questions.csv", "--evidence", "testdata/evidence"}
+
+	var piped, stderr bytes.Buffer
+	if code := Run(args, &piped, &stderr); code != ExitOK {
+		t.Fatalf("exit %d: %s", code, stderr.String())
+	}
+	if strings.Contains(piped.String(), "ORYNVAL LABS") {
+		t.Error("piped terminal output must not contain the banner")
+	}
+
+	orig := isTerminal
+	defer func() { isTerminal = orig }()
+	isTerminal = func(io.Writer) bool { return true }
+	var tty bytes.Buffer
+	if code := Run(args, &tty, &stderr); code != ExitOK {
+		t.Fatalf("exit %d: %s", code, stderr.String())
+	}
+	got := tty.String()
+	if strings.Count(got, "ORYNVAL LABS · trust-proof") != 1 || !strings.HasPrefix(got, " ╭─────╮") {
+		t.Errorf("TTY output should open with exactly one banner:\n%s", got)
 	}
 }

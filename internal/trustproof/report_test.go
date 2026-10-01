@@ -43,11 +43,11 @@ func TestRenderDispatch(t *testing.T) {
 		t.Error("md render should start with title")
 	}
 	terminal := render("terminal", rep)
-	if !strings.Contains(terminal, "██████╗ ██████╗") || !strings.Contains(terminal, "DRAFT") {
-		t.Error("terminal render should contain Orynval banner and DRAFT label")
+	if !strings.HasPrefix(terminal, "trust-proof — DRAFT") {
+		t.Error("terminal render should open with the DRAFT label (the banner is added only for a TTY)")
 	}
-	for _, format := range []string{"json", "csv", "md"} {
-		if strings.Contains(render(format, rep), "██████╗") {
+	for _, format := range []string{"terminal", "json", "csv", "md"} {
+		if strings.Contains(render(format, rep), "ORYNVAL LABS") {
 			t.Errorf("%s output must not contain terminal banner", format)
 		}
 	}
