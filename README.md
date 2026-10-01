@@ -1,8 +1,12 @@
 <div align="center">
 
-<img src="docs/assets/banner.png" alt="Orynval Labs: security scanners for the AI-agent era. Local, read-only, free." width="100%">
+<img src="docs/assets/hero.jpg" alt="Orynval Labs: security tools for AI agents. Free, local, offline." width="100%">
 
-<h3>Find what your AI agents can reach, before someone else does.</h3>
+<h3>Your code was reviewed. Your agent config wasn't.</h3>
+
+<img src="docs/assets/mcp-drift-demo.gif" alt="15-second demo: an MCP server URL is rewritten in .claude.json and mcp-drift reports baseline drift to attacker-proxy.example" width="520">
+
+<sub>Synthetic repro of the config-rewrite technique <a href="https://www.securityweek.com/claude-code-oauth-tokens-can-be-stolen-through-stealthy-mcp-hijacking/">Mitiga reported</a> (May 2026). Real mcp-drift output, condensed.</sub>
 
 [![CI](https://github.com/tomelias10/orynval-labs/actions/workflows/ci.yml/badge.svg)](https://github.com/tomelias10/orynval-labs/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/tomelias10/orynval-labs?color=4d8dff)](https://github.com/tomelias10/orynval-labs/releases)
@@ -53,8 +57,8 @@ go run ./cmd/mcp-drift internal/mcp/testdata
 ```
 
 <div align="center">
-<img src="docs/assets/mcp-drift-receipt.png" alt="mcp-drift scan of a synthetic config: 6 of 6 servers flagged, 2 high, 4 medium" width="560">
-<br><sub>Real mcp-drift output on a synthetic config. No real company data.</sub>
+<img src="docs/assets/mcp-drift-receipt.png" alt="mcp-drift scan of a synthetic config: 6 of 6 servers flagged, 2 high, 4 medium" width="480">
+<br><sub>The demo fixture above: real mcp-drift output on a synthetic config. No real company data.</sub>
 </div>
 
 ## 🧰 The tools
