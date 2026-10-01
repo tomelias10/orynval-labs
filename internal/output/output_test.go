@@ -163,9 +163,10 @@ func TestRenderUnsupportedFormat(t *testing.T) {
 
 func TestTerminalBannerNeverPollutesMachineFormats(t *testing.T) {
 	r := sampleReport()
+	// Even with Banner requested, machine formats must stay clean.
 	for _, f := range []Format{FormatJSON, FormatSARIF, FormatHTML, FormatBadge, FormatShare} {
-		out := render(t, f, r, Options{})
-		if bytes.Contains(out, []byte("██████╗")) || bytes.Contains(out, []byte("L  A  B  S")) {
+		out := render(t, f, r, Options{Banner: true})
+		if bytes.Contains(out, []byte("╭─────╮")) || bytes.Contains(out, []byte("ORYNVAL LABS")) || bytes.Contains(out, []byte("▌ ▐")) {
 			t.Errorf("format %q unexpectedly contains terminal banner", f)
 		}
 	}

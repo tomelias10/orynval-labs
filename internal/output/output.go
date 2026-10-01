@@ -47,6 +47,9 @@ type Report struct {
 // machine-readable formats ignore it so their output stays deterministic.
 type Options struct {
 	Color bool
+	// Banner prints the compact Orynval identity above a terminal report.
+	// Set it only when the destination is an interactive terminal.
+	Banner bool
 }
 
 // Summary is the per-severity tally shown at the top of every report. Field

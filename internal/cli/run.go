@@ -130,7 +130,7 @@ func (t Tool) Run(args []string, stdout, stderr io.Writer) int {
 		Rules:    ruleDocs(reg),
 		Findings: findings,
 	}
-	opts := output.Options{Color: colorEnabled(colorMode, stdout)}
+	opts := output.Options{Color: colorEnabled(colorMode, stdout), Banner: output.IsTerminal(stdout)}
 	if err := output.Render(stdout, format, report, opts); err != nil {
 		fmt.Fprintln(stderr, "error:", err)
 		return ExitError

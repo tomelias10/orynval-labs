@@ -105,7 +105,10 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	rep := newReport(answerAll(newCorpus(passages), qs, minConfidence))
 	content := render(format, rep)
 	if format == "terminal" {
-		content = output.TerminalBanner + "\n\n" + content + "\nNeed help reviewing a gap or finding?  https://orynval.com  |  tom@orynval.com\nInclude the tool name (trust-proof) and the smallest reproducible context you can safely share.\n"
+		if out == "" && isTerminal(stdout) {
+			content = output.Banner(Name, Version) + "\n" + content
+		}
+		content += "\nNeed help reviewing a gap or finding?  https://orynval.com  |  tom@orynval.com\nInclude the tool name (trust-proof) and the smallest reproducible context you can safely share.\n"
 	}
 
 	if err := emit(content, format, out, stdout); err != nil {
@@ -122,6 +125,9 @@ func Run(args []string, stdout, stderr io.Writer) int {
 // emit writes the rendered content to its destination: a file for csv/md when
 // --out is set, otherwise stdout. Routing every format through one writer keeps
 // the single I/O error path in one place.
+// isTerminal is indirected so tests can exercise the interactive banner path.
+var isTerminal = output.IsTerminal
+
 func emit(content, format, out string, stdout io.Writer) error {
 	if out != "" && (format == "csv" || format == "md") {
 		return os.WriteFile(out, []byte(content), 0o644)
