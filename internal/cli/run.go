@@ -38,6 +38,11 @@ type Tool struct {
 	Summary        string // one-line description shown in -h
 	InformationURI string
 	Rules          []core.Rule
+	// PrintBaseline, when set, adds a --print-baseline flag: instead of
+	// scanning for findings, the tool writes the approved-baseline document
+	// for the tree to stdout. It never writes into the scanned tree; the user
+	// redirects the output to wherever the baseline should live.
+	PrintBaseline func(ctx *core.Context) []byte
 }
 
 // Run parses args (excluding the program name), executes the scan, renders the
@@ -55,6 +60,7 @@ func (t Tool) Run(args []string, stdout, stderr io.Writer) int {
 		maxFileSize int64
 		listRules   bool
 		showVersion bool
+		printBase   bool
 	)
 	fs.StringVar(&formatStr, "format", "terminal", "output format: terminal|json|sarif|html|badge|share")
 	fs.StringVar(&formatStr, "f", "terminal", "shorthand for --format")
@@ -64,6 +70,9 @@ func (t Tool) Run(args []string, stdout, stderr io.Writer) int {
 	fs.Int64Var(&maxFileSize, "max-file-size", walk.DefaultMaxFileSize, "skip files larger than this many bytes")
 	fs.BoolVar(&listRules, "list-rules", false, "print the tool's rules and exit")
 	fs.BoolVar(&showVersion, "version", false, "print version and exit")
+	if t.PrintBaseline != nil {
+		fs.BoolVar(&printBase, "print-baseline", false, "print an approved-baseline document for the current configs to stdout and exit (redirect it to .orynval/mcp-baseline.json)")
+	}
 
 	fs.Usage = func() {
 		fmt.Fprintf(stderr, "%s %s — %s\n\n", t.Name, t.Version, t.Summary)
@@ -123,6 +132,13 @@ func (t Tool) Run(args []string, stdout, stderr io.Writer) int {
 	}
 
 	ctx := core.NewContext(w.Root(), w, core.Options{})
+	if printBase {
+		if _, err := stdout.Write(t.PrintBaseline(ctx)); err != nil {
+			fmt.Fprintln(stderr, "error:", err)
+			return ExitError
+		}
+		return ExitOK
+	}
 	findings := reg.Evaluate(ctx)
 
 	report := output.Report{

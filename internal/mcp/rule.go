@@ -1,6 +1,7 @@
 package mcp
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -177,4 +178,29 @@ func remediation(factors []factor) string {
 		parts[i] = f.remediation
 	}
 	return strings.Join(parts, " ")
+}
+
+// BaselineJSON returns an approved-baseline document for every server
+// currently declared in the tree, in the format read from
+// .orynval/mcp-baseline.json. It is the read-only way to establish a
+// baseline: mcp-drift prints it and never writes into the scanned tree.
+// When two configs declare the same server name, the first one in walk order
+// is recorded, so the output is deterministic.
+func BaselineJSON(ctx *core.Context) []byte {
+	b := Baseline{Servers: map[string]string{}}
+	_ = ctx.Walk(func(f core.File) error {
+		if f.Rel == baselineRel {
+			return nil
+		}
+		content, _ := ctx.Read(f)
+		for _, s := range serversFromFile(f.Rel, content) {
+			if _, seen := b.Servers[s.Name]; !seen {
+				b.Servers[s.Name] = s.Signature
+			}
+		}
+		return nil
+	})
+	// Marshalling a map of strings cannot fail, so the error is ignored.
+	out, _ := json.MarshalIndent(b, "", "  ")
+	return append(out, '\n')
 }

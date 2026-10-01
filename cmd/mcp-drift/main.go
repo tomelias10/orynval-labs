@@ -40,6 +40,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 		Summary:        "audit local AI-agent / MCP server configs for risky scope and baseline drift (read-only, offline)",
 		InformationURI: "https://github.com/tomelias10/orynval-labs",
 		Rules:          []core.Rule{mcp.NewRule()},
+		PrintBaseline:  mcp.BaselineJSON,
 	}
 	return tool.Run(args, stdout, stderr)
 }
