@@ -31,7 +31,8 @@ import (
 
 // Version is the nhi-ghost release version, surfaced by --version and embedded
 // in every report.
-const Version = "0.1.0"
+// Release builds stamp it with -ldflags "-X .../internal/nhi.Version=...".
+var Version = "0.1.2"
 
 // informationURI is the tool's documentation anchor, embedded in SARIF/HTML.
 const informationURI = "https://github.com/tomelias10/orynval-labs/blob/main/docs/specs/nhi-ghost.md"

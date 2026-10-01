@@ -50,6 +50,42 @@ jobs:
           version: "~> v2"
           args: release --snapshot --clean --skip=publish
 
+      - name: Verify archive matrix (3 tools x 3 OS x 2 arch)
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          count=0
+          for tool in mcp-drift nhi-ghost trust-proof; do
+            for os in linux darwin windows; do
+              for arch in amd64 arm64; do
+                ext=tar.gz; [ "$os" = windows ] && ext=zip
+                f=$(ls dist/${tool}_*_${os}_${arch}.${ext} 2>/dev/null || true)
+                if [ -z "$f" ]; then echo "::error::missing archive ${tool} ${os}/${arch}"; exit 1; fi
+                bin=$tool; [ "$os" = windows ] && bin=$tool.exe
+                if [ "$ext" = zip ]; then list=$(unzip -Z1 "$f"); else list=$(tar tzf "$f"); fi
+                echo "$list" | grep -qx "$bin" || { echo "::error::$f does not contain $bin"; exit 1; }
+                others=$(echo "$list" | grep -Ev '\.md$|^LICENSE$' | grep -vx "$bin" || true)
+                [ -z "$others" ] || { echo "::error::$f contains extra binaries: $others"; exit 1; }
+                count=$((count+1))
+              done
+            done
+          done
+          echo "verified $count archives"
+          [ "$count" -eq 18 ]
+
+      - name: Verify release binaries report the release version
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          want=$(jq -r .version dist/metadata.json)
+          for tool in mcp-drift nhi-ghost trust-proof; do
+            tmp=$(mktemp -d)
+            tar xzf dist/${tool}_*_linux_amd64.tar.gz -C "$tmp" "$tool"
+            got=$("$tmp/$tool" --version)
+            echo "$got"
+            echo "$got" | grep -qF "$want" || { echo "::error::$tool reports '$got', want $want"; exit 1; }
+          done
+
       - name: Publish tagged release
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         uses: goreleaser/goreleaser-action@v7
