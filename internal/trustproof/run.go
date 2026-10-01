@@ -17,11 +17,12 @@ const (
 	ExitGaps  = 3 // ran successfully but gaps remain (with --fail-on-gaps)
 )
 
-// Name and Version identify the tool in --version and usage output.
-const (
-	Name    = "trust-proof"
-	Version = "0.1.0"
-)
+// Name identifies the tool in --version and usage output.
+const Name = "trust-proof"
+
+// Version is reported by --version. Release builds stamp it with
+// -ldflags "-X .../internal/trustproof.Version=...".
+var Version = "0.1.2"
 
 // validFormats are the accepted --format values. terminal and json go to
 // stdout; csv and md honor --out (falling back to stdout).

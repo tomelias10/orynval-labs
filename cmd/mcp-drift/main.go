@@ -18,9 +18,10 @@ import (
 	"github.com/tomelias10/orynval-labs/internal/mcp"
 )
 
-// version is the tool's reported version. It is a build-time constant; mcp-drift
-// records no timestamps and reaches no network to discover it.
-const version = "0.1.0"
+// version is the tool's reported version. Release builds stamp it with
+// -ldflags "-X main.version=..."; mcp-drift records no timestamps and reaches no
+// network to discover it.
+var version = "0.1.2"
 
 // osExit is indirected so main's exit path is testable without terminating the
 // test process.

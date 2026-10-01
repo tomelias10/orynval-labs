@@ -27,7 +27,7 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -s -w -X main.version={{ .Version }}
+      - -s -w -X github.com/tomelias10/orynval-labs/internal/nhi.Version={{ .Version }}
     mod_timestamp: "{{ .CommitTimestamp }}"
     goos: [linux, darwin, windows]
     goarch: [amd64, arm64]
@@ -53,19 +53,54 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -s -w -X main.version={{ .Version }}
+      - -s -w -X github.com/tomelias10/orynval-labs/internal/trustproof.Version={{ .Version }}
     mod_timestamp: "{{ .CommitTimestamp }}"
     goos: [linux, darwin, windows]
     goarch: [amd64, arm64]
 
 archives:
-  - id: default
+  # One archive per tool per OS/arch (3 tools x 3 OS x 2 arch = 18 archives).
+  # Without `ids`, GoReleaser groups every build for a platform into a single
+  # archive, which shipped 6 mixed archives named after whichever binary came
+  # first (v0.1.0 and v0.1.1). Each entry below is scoped to exactly one build.
+  - id: mcp-drift
+    ids: [mcp-drift]
     formats: [tar.gz]
     format_overrides:
       - goos: windows
         formats: [zip]
     name_template: >-
-      {{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+      mcp-drift_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    files:
+      - README.md
+      - LICENSE
+      - SECURITY.md
+      - PRIVACY.md
+      - THREAT_MODEL.md
+
+  - id: nhi-ghost
+    ids: [nhi-ghost]
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: >-
+      nhi-ghost_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    files:
+      - README.md
+      - LICENSE
+      - SECURITY.md
+      - PRIVACY.md
+      - THREAT_MODEL.md
+
+  - id: trust-proof
+    ids: [trust-proof]
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: >-
+      trust-proof_{{ .Version }}_{{ .Os }}_{{ .Arch }}
     files:
       - README.md
       - LICENSE
