@@ -76,6 +76,39 @@ mcp-drift -f sarif . > mcp-drift.sarif   # upload to code scanning
 mcp-drift --fail-on high .               # exit 3 fails the build
 ```
 
+### Run it in GitHub Actions
+
+Copy this into `.github/workflows/mcp-drift.yml`. The tool and every action are pinned (no `@latest`), findings land in code scanning, and any high-severity finding fails the job:
+
+```yaml
+name: mcp-drift
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+  security-events: write
+jobs:
+  mcp-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '1.27'
+      - run: go install github.com/tomelias10/orynval-labs/cmd/mcp-drift@v0.1.2
+      - name: Scan MCP configs
+        run: mcp-drift -f sarif --fail-on high . > mcp-drift.sarif
+      - name: Upload SARIF to code scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: mcp-drift.sarif
+```
+
+`if: always()` uploads the SARIF even when the scan step exits `3`, so the findings show up in the Security tab next to the failed check.
+
 If a tool saved you time, a ⭐ is the simplest way to help other engineers find it.
 
 ## Why these three
@@ -100,12 +133,14 @@ Developers are wiring local AI agents and [MCP](https://modelcontextprotocol.io)
 servers into their editors and shells faster than security can review them. Each
 one is an unaudited program with filesystem reach, network egress, and access to
 your environment and secrets. `mcp-drift` discovers local agent/MCP
-configurations and flags the security-relevant facts: unknown or unapproved
-connections, the tools/capabilities they expose, their filesystem and network
-scope, secret/environment exposure, risky permission combinations, and **drift
-from an approved baseline**. It is intentionally narrower than a network gateway
-— static, read-only, local-only, and **never executes anything it discovers** —
-so it deploys in minutes instead of a quarter.
+configurations and flags the security-relevant facts it can read statically:
+unpinned or mutable package refs (`npx -y pkg`, `@latest`, `uvx pkg` with no
+version), unknown or unapproved servers, filesystem and network scope, secrets
+passed inline via `env`, risky launchers (`curl | bash`, privileged containers),
+and **drift from an approved baseline**. It is intentionally narrower than a
+network gateway — static, read-only, local-only, and **never executes anything
+it discovers** — so it deploys in minutes instead of a quarter. Because it never
+starts a server, it does not see the tools a server exposes at runtime.
 
 ### 3. `trust-proof` — the deal-blocking security questionnaire, grounded
 
@@ -238,7 +273,7 @@ per machine identity — with observed blast radius, the OBSERVED/INFERRED basis
 for each risk factor, and concrete remediation. Secret values are never printed:
 
 ```
-nhi-ghost 0.1.0
+nhi-ghost 0.1.2
 7 findings: 4 high, 1 medium, 1 low, 1 info
 
 [HIGH] orynval.nhi.identity-risk — Committed secret material
@@ -282,7 +317,7 @@ go run ./cmd/mcp-drift internal/mcp/testdata     # or: make demo-mcp
 ```
 
 ```text
-mcp-drift 0.1.0
+mcp-drift 0.1.2
 7 findings: 2 high, 2 medium, 3 info
 
 [HIGH] orynval.mcp.config-audit — MCP server "filesystem" — 1 risk factor(s): broad-filesystem-scope
