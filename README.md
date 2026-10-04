@@ -27,6 +27,10 @@ Orynval Labs is three small Go CLIs that read those files and tell you what they
 
 > **Public preview.** All three tools run today. Review findings before acting on them, and please report false positives or missed detections.
 
+**Start with `mcp-drift` if you use AI coding agents.** It reviews configured connections and changes from an approved baseline. This Go repository is Orynval's main public tool collection. The separate [MCP Drift Check](https://github.com/tomelias10/mcp-drift-check) Python CLI and GitHub Action focus on package-reference mutability; they are separate tools, not interchangeable releases.
+
+[Verified open-source contributions](docs/verified-contributions.md) · [Help us improve a detector](https://github.com/tomelias10/orynval-labs/issues/new?template=detector_accuracy.yml)
+
 ## ⚡ Quick start
 
 ```sh
@@ -36,6 +40,10 @@ mcp-drift ~/your-project
 
 That's it. Point it at any folder with `.cursor/mcp.json`, `.mcp.json`, `.vscode/mcp.json` or similar agent configs.
 Prebuilt binaries for macOS, Linux and Windows are on the [Releases](https://github.com/tomelias10/orynval-labs/releases) page.
+
+### Help us learn from one real workflow
+
+Run the tool on a repository you own or are authorized to review. Was a finding useful, wrong, or missing? [Share a minimal synthetic example](https://github.com/tomelias10/orynval-labs/issues/new?template=detector_accuracy.yml), including the tool version and what you expected. Do not publish real credentials, private configurations, or customer data. You can also [contribute a synthetic MCP config fixture](https://github.com/tomelias10/orynval-labs/issues/5).
 
 ### Catch silent config changes
 
