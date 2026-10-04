@@ -57,7 +57,7 @@ mcp-drift .                                                  # later: any change
 
 `--print-baseline` only prints. mcp-drift never writes into the tree it scans; you choose where the baseline lives and commit it like any other approved config.
 
-Want a verified before/after demonstration? With `mcp-drift` installed, run:
+Want a verified before/after demonstration? From a checkout of this repository, with `mcp-drift` installed, run:
 
 ```sh
 python3 docs/demo-approved-config.py
