@@ -57,6 +57,14 @@ mcp-drift .                                                  # later: any change
 
 `--print-baseline` only prints. mcp-drift never writes into the tree it scans; you choose where the baseline lives and commit it like any other approved config.
 
+Want a verified before/after demonstration? From a checkout of this repository, with `mcp-drift` installed, run:
+
+```sh
+python3 docs/demo-approved-config.py
+```
+
+It creates its own temporary synthetic config, records a baseline, changes only a server URL, and verifies that baseline drift makes the HIGH policy exit with code `3`. It never reads your project configuration or starts/contacts the configured server. This demonstrates detection, not incident prevention. The temporary files are removed on exit.
+
 Want to see it first, with no real data? Run the synthetic demo:
 
 ```sh
