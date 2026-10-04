@@ -43,7 +43,7 @@ Prebuilt binaries for macOS, Linux and Windows are on the [Releases](https://git
 
 ### Help us learn from one real workflow
 
-Run the tool on a repository you own or are authorized to review. Was a finding useful, wrong, or missing? [Share a minimal synthetic example](https://github.com/tomelias10/orynval-labs/issues/new?template=detector_accuracy.yml), including the tool version and what you expected. Do not publish real credentials, private configurations, or customer data. You can also [contribute a synthetic MCP config fixture](https://github.com/tomelias10/orynval-labs/issues/5).
+Run the tool on a repository you own or are authorized to review. [Tell us whether it helped your review workflow](https://github.com/tomelias10/orynval-labs/issues/new?template=workflow_feedback.yml), even if you found no detector bug. Was a finding useful, wrong, or missing? [Share a minimal synthetic example](https://github.com/tomelias10/orynval-labs/issues/new?template=detector_accuracy.yml), including the tool version and what you expected. Do not publish real credentials, private configurations, or customer data. You can also [contribute a synthetic MCP config fixture](https://github.com/tomelias10/orynval-labs/issues/5).
 
 ### Catch silent config changes
 
