@@ -1,0 +1,66 @@
+name: Share an authorized workflow trial
+description: Tell us whether mcp-drift helped your review process, even when no detector bug occurred.
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        We want to learn how teams review AI-agent configuration. This is a public
+        issue: use synthetic examples and broad role descriptions only. Do not
+        include credentials, private configuration, internal URLs, customer data,
+        or personal contact details. Detector bugs belong in Detector accuracy.
+  - type: input
+    id: version
+    attributes:
+      label: Tool and version
+      placeholder: "mcp-drift v0.1.2"
+    validations:
+      required: true
+  - type: textarea
+    id: workflow
+    attributes:
+      label: What were you trying to review?
+      description: Describe the review task, your broad role, and how you did it before this trial.
+    validations:
+      required: true
+  - type: dropdown
+    id: usefulness
+    attributes:
+      label: Did the output help?
+      options:
+        - Useful and actionable
+        - Useful, but requires manual verification
+        - No useful finding in this trial
+        - Could not complete the trial
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What happened, and what was missing?
+      description: Describe the action you took or the blocker. Use no real secret values or private configuration.
+    validations:
+      required: true
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does this review task recur?
+      options:
+        - Daily
+        - Weekly
+        - Monthly
+        - Only when configuration changes
+        - One-time review
+        - Unknown
+  - type: textarea
+    id: manual_work
+    attributes:
+      label: What manual work remains?
+      description: Optional. Estimate review time, state whether it is measured or guessed, and name the broad role that owns this process.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Review scope
+      options:
+        - label: The trial was on my own repository or within documented authorization, and this issue contains no private data.
+          required: true
