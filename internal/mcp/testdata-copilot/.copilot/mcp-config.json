@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "copilot-synthetic": {
+      "type": "local",
+      "command": "synthetic-mcp-server",
+      "args": ["--fixture"],
+      "tools": ["read_fixture"]
+    }
+  }
+}

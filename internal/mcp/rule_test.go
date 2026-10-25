@@ -130,6 +130,34 @@ func TestEvaluateCleanTreeIsInfoOnly(t *testing.T) {
 	}
 }
 
+func TestEvaluateCopilotCLIConfigFixture(t *testing.T) {
+	findings := NewRule().Evaluate(newContext(t, "testdata-copilot"))
+	if len(findings) != 1 {
+		t.Fatalf("want 1 finding, got %d", len(findings))
+	}
+
+	f := findings[0]
+	if f.RuleID != RuleID {
+		t.Errorf("rule ID = %q, want %q", f.RuleID, RuleID)
+	}
+	if f.Severity != core.SeverityInfo {
+		t.Errorf("synthetic clean server should be INFO, got %s", f.Severity)
+	}
+	if f.Confidence != core.ConfidenceHigh {
+		t.Errorf("clean inventory confidence should be HIGH, got %s", f.Confidence)
+	}
+	if len(f.Evidence) != 1 {
+		t.Fatalf("clean finding should have one inventory evidence entry, got %d", len(f.Evidence))
+	}
+	evidence := f.Evidence[0]
+	if evidence.File != ".copilot/mcp-config.json" || evidence.Line != 3 {
+		t.Errorf("evidence source = %q:%d, want .copilot/mcp-config.json:3", evidence.File, evidence.Line)
+	}
+	if evidence.Kind != core.KindObserved {
+		t.Errorf("evidence kind = %q, want %q", evidence.Kind, core.KindObserved)
+	}
+}
+
 func TestEvaluateUnapprovedCleanServerIsInferredConfidence(t *testing.T) {
 	// A baseline that approves nothing makes a clean server "unapproved" only —
 	// an inference — so the finding's confidence drops to MEDIUM.

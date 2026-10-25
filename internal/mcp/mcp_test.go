@@ -1,6 +1,7 @@
 package mcp
 
 import (
+	"os"
 	"testing"
 )
 
@@ -51,6 +52,34 @@ func TestServersFromFileDiscovery(t *testing.T) {
 	}
 	if _, ok := findServer(servers, "empty"); ok {
 		t.Error("entry with neither command nor url should be skipped")
+	}
+}
+
+func TestServersFromFileCopilotCLIConfig(t *testing.T) {
+	// GitHub documents this local-server shape for Copilot CLI:
+	// https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers
+	content, err := os.ReadFile("testdata-copilot/.copilot/mcp-config.json")
+	if err != nil {
+		t.Fatalf("read Copilot CLI fixture: %v", err)
+	}
+
+	servers := serversFromFile(".copilot/mcp-config.json", content)
+	if len(servers) != 1 {
+		t.Fatalf("want 1 server, got %d: %+v", len(servers), servers)
+	}
+
+	server := servers[0]
+	if server.Name != "copilot-synthetic" {
+		t.Errorf("server name = %q, want copilot-synthetic", server.Name)
+	}
+	if server.Command != "synthetic-mcp-server" {
+		t.Errorf("server command = %q, want synthetic-mcp-server", server.Command)
+	}
+	if len(server.Args) != 1 || server.Args[0] != "--fixture" {
+		t.Errorf("server args = %q, want [--fixture]", server.Args)
+	}
+	if server.File != ".copilot/mcp-config.json" || server.Line != 3 {
+		t.Errorf("server source anchor = %q:%d, want .copilot/mcp-config.json:3", server.File, server.Line)
 	}
 }
 
